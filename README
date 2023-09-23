@@ -9,3 +9,5 @@ docker run --name estmp02 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.c
 docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i
 
 docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+
+docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-users useradd philip -p philip 

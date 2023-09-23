@@ -21,3 +21,12 @@ xpack.fleet.outputs: [{id: fleet-default-output, name: default, is_default: true
 server.ssl.enabled: true
 server.ssl.certificate: /usr/share/kibana/config/kibana-local.crt
 server.ssl.key: /usr/share/kibana/config/kibana-local.key
+xpack.security.authc.providers:
+  basic.basic1:
+    order: 0
+  anonymous.anonymous1:
+    order: 1
+    credentials:
+      username: "philip"
+      password: "philip"
+xpack.security.sameSiteCookies: "None"
