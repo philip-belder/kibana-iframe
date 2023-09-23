@@ -1,0 +1,11 @@
+wsl -d docker-desktop
+sysctl -w vm.max_map_count=262144
+
+
+docker run --name estmp01 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.co/elasticsearch/elasticsearch:8.5.0
+docker run --name estmp02 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.co/elasticsearch/elasticsearch:8.5.0
+
+
+docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i
+
+docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana

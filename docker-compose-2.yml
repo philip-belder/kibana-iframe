@@ -1,0 +1,121 @@
+version: '3.7'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: elasticsearch21
+    environment:
+      - node.name=es-node21
+      - cluster.name=es-cluster-2
+      - discovery.seed_hosts=elasticsearch22,elasticsearch23
+      - cluster.initial_master_nodes=es-node21,es-node22,es-node23
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - bootstrap.memory_lock=true
+      - cluster.routing.allocation.disk.threshold_enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata21:/usr/share/elasticsearch/data
+      - ./elasticsearch-es2-master.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9201:9201
+      - 9301:9301
+    networks:
+      esnet2:
+      elasticsearch_network:
+        ipv4_address: 172.31.0.4  
+
+    healthcheck:
+      test: curl -s http://elasticsearch21:9201 >/dev/null || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 50
+
+  elasticsearch22:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: elasticsearch22
+    environment:
+      - node.name=es-node22
+      - cluster.name=es-cluster-2
+      - discovery.seed_hosts=elasticsearch21,elasticsearch23
+      - cluster.initial_master_nodes=es-node21,es-node22,es-node23
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - bootstrap.memory_lock=true
+      - cluster.routing.allocation.disk.threshold_enabled=false
+    ports:
+      - 9302:9301
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata22:/usr/share/elasticsearch/data
+      - ./elasticsearch-es2-2.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      esnet2:
+      elasticsearch_network:
+        ipv4_address: 172.31.0.3 
+
+  elasticsearch23:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: elasticsearch23
+    environment:
+      - node.name=es-node23
+      - cluster.name=es-cluster-2
+      - discovery.seed_hosts=elasticsearch21,elasticsearch22
+      - cluster.initial_master_nodes=es-node21,es-node22,es-node23
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - bootstrap.memory_lock=true
+      - cluster.routing.allocation.disk.threshold_enabled=false 
+    ports:
+      - 9303:9301
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata23:/usr/share/elasticsearch/data
+      - ./elasticsearch-es2-3.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      esnet2:
+      elasticsearch_network:
+        ipv4_address: 172.20.0.2 
+  kibana_23:
+    image: docker.elastic.co/kibana/kibana:7.10.0
+    container_name: kibana_23
+    environment:
+      - ELASTICSEARCH_HOSTS=http://172.31.0.4:9201
+      - monitoring.kibana.collection.enabled=false
+    ports:
+      - 5602:5601
+    networks:
+      esnet2:
+      elasticsearch_network:
+        ipv4_address: 172.20.0.5
+    volumes:
+      - kdata23:/usr/share/kibana/data
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    healthcheck:
+      test:
+       [
+         "CMD-SHELL",
+         "curl -s -I http://localhost:5602 | grep 'HTTP/1.1 302 Found'",
+       ]
+      interval: 30s
+      timeout: 10s
+      retries: 50
+    depends_on: [elasticsearch21, elasticsearch22, elasticsearch23]
+
+volumes:
+  esdata21:
+  esdata22:
+  esdata23:
+  kdata23:
+
+networks:
+  esnet2:
+    driver: bridge
+  elasticsearch_network:  
+    external: true
