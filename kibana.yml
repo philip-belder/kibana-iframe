@@ -1,22 +1,19 @@
-#
-# ** THIS IS AN AUTO-GENERATED FILE **
-#
-
 # Default Kibana configuration for docker target
 #server.host: "0.0.0.0"
 #server.shutdownTimeout: "5s"
 #elasticsearch.hosts: [ "http://elasticsearch:9200" ]
 #monitoring.ui.container.elasticsearch.enabled: true
-### >>>>>>> BACKUP END: Kibana interactive setup (2023-09-23T18:35:47.074Z)
+### >>>>>>> BACKUP END: Kibana interactive setup (2023-09-26T07:00:50.397Z)
 
 # This section was automatically generated during setup.
 server.host: 0.0.0.0
 server.shutdownTimeout: 5s
-elasticsearch.hosts: ['https://172.20.0.2:9200']
+elasticsearch.hosts: ['https://172.18.0.2:9200']
 monitoring.ui.container.elasticsearch.enabled: true
-elasticsearch.serviceAccountToken: AAEAAWVsYXN0aWMva2liYW5hL2Vucm9sbC1wcm9jZXNzLXRva2VuLTE2OTU0OTQxNDYzNDU6dkUwaUVrckxSSWlwQWs3a1piYUw0UQ
-elasticsearch.ssl.certificateAuthorities: [/usr/share/kibana/data/ca_1695494147071.crt]
-xpack.fleet.outputs: [{id: fleet-default-output, name: default, is_default: true, is_default_monitoring: true, type: elasticsearch, hosts: ['https://172.20.0.2:9200'], ca_trusted_fingerprint: 389d5fe81c79184ab8c232d8d086400e694eef6c53e93c431a5ee3f6d5d813cd}]
+elasticsearch.serviceAccountToken: AAEAAWVsYXN0aWMva2liYW5hL2Vucm9sbC1wcm9jZXNzLXRva2VuLTE2OTU3MTE2NDk1NDI6dXhsNERuSTZSUTJhWXlnaE5oeTJLQQ
+elasticsearch.ssl.certificateAuthorities: [/usr/share/kibana/data/ca_1695711650394.crt]
+xpack.fleet.outputs: [{id: fleet-default-output, name: default, is_default: true, is_default_monitoring: true, type: elasticsearch, hosts: ['https://172.18.0.2:9200'], ca_trusted_fingerprint: a53ea73114b26522f4b7b10e249bf89610e4d48d9c18c2f91465cf0bd807221f}]
+
 
 server.ssl.enabled: true
 server.ssl.certificate: /usr/share/kibana/config/kibana-local.crt
@@ -26,6 +23,7 @@ xpack.security.authc.providers:
     order: 0
   anonymous.anonymous1:
     order: 1
+    showInSelector: false
     credentials:
       username: "philip"
       password: "philip"

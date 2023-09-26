@@ -1,13 +1,16 @@
+Create docker network with subnet
+docker network create elasticsearch_network --subnet=172.20.0.0/16
+
+List docker network subnets
+docker network ls --format "{{.Name}}" | while read i; do echo $i --- $(docker network inspect $i | grep Subnet); done
+
+Troublehsooting
 wsl -d docker-desktop
 sysctl -w vm.max_map_count=262144
 
-
-docker run --name estmp01 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.co/elasticsearch/elasticsearch:8.5.0
-docker run --name estmp02 --net elastic -p 9200:9200 -it -m 1GB docker.elastic.co/elasticsearch/elasticsearch:8.5.0
-
-
+Elastic search useful commands
 docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic -i
 
 docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
 
-docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-users useradd philip -p philip 
+docker exec -it elasticsearch85 /usr/share/elasticsearch/bin/elasticsearch-users useradd philip -p philip -r viewer
